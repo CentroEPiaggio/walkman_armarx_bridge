@@ -1,2 +1,3 @@
 
 add_subdirectory(ROSArmarXBridge)
+add_subdirectory(ArmarXROSBridge)
