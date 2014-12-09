@@ -17,3 +17,5 @@ add_subdirectory(etc)
 add_subdirectory(source)
 
 install_project()
+
+add_subdirectory(scenarios)
