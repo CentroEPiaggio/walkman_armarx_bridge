@@ -30,13 +30,16 @@ namespace visionx {
       
 void PCLPointCloudProvider::onInitCapturingPointCloudProvider()
 {
+  
+    pointCloudDimensions = getProperty<Grid2DDimensions>("Dimensions").getValue();
+     
     point_cloud_topic_name = getProperty<std::string>("pointCloudROSTopic").getValue();
 
     setNumberPointClouds(1);
 
-//     setPointCloudsFormat();
+    setPointCloudsFormat(eStructured, eCbrCbgCbbCba_PfxPfyPfz, pointCloudDimensions, -1);
     
-//     setPointCloudSyncMode();
+    setPointCloudSyncMode(eCaptureSynchronization);
 
     spinningTask = new RunningTask<PCLPointCloudProvider>(this, &PCLPointCloudProvider::doROSSpinning);
 }
@@ -44,7 +47,7 @@ void PCLPointCloudProvider::onInitCapturingPointCloudProvider()
 
 void PCLPointCloudProvider::onExitCapturingPointCloudProvider()
 {
-
+   spinningTask->stop();
 }
 
 
@@ -82,22 +85,29 @@ bool PCLPointCloudProvider::convertPointCloud(sensor_msgs::PointCloud2ConstPtr&,
 {
    pcl::PointCloud<pcl::PointXYZRGB>::Ptr InputPCLCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
    pcl::fromROSMsg(*msg, *InputPCLCloud);
-
-   visionx::PointCloud::PointCloudFormatInfo Information;
+   
+   PointCloudFormatInfo Information;
    Information.dimensions.width = InputPCLCloud->width;
    Information.dimensions.height = InputPCLCloud->height;
-   Information.bytesPerPoint = sizeof(visionx::PointCloud::RGBA) + sizeof(visionx::PointCloud::Point3D);
-   Information.pointCloudStructure = visionx::PointCloud::PointCloudStructureType::eStructured;
+   Information.bytesPerPoint = sizeof(RGBA) + sizeof(Point3D);
+   Information.pointCloudStructure = PointCloudStructureType::eStructured;
    Information.totalVisiblePoints = -1;
-   Information.pointContent = visionx::PointCloud::eCbrCbgCbbCba_PfxPfyPfz;
+   Information.pointContent = eCbrCbgCbbCba_PfxPfyPfz;
 
+   
+   if( Information.dimensions.width != pointCloudDimensions.width || Information.dimensions.height != pointCloudDimensions.height) {
+//      ARMARX_ERROR << "invalid point cloud dimensions" << flush;
+      return false;
+   }
+ 
+   
    pcl::PointXYZRGB* pPCLSource = const_cast<pcl::PointXYZRGB*>(&InputPCLCloud->points[0]);
 
    const int Area = Information.dimensions.width * Information.dimensions.height;
    // store this somewhere else
-   visionx::PointCloud::ColoredPoint3D* pBufferBase = new visionx::PointCloud::ColoredPoint3D[Area];
-   visionx::PointCloud::ColoredPoint3D* pBuffer = pBufferBase;
-   visionx::PointCloud::ColoredPoint3D* pEndBuffer = pBuffer + Area;
+   ColoredPoint3D* pBufferBase = new ColoredPoint3D[Area];
+   ColoredPoint3D* pBuffer = pBufferBase;
+   ColoredPoint3D* pEndBuffer = pBuffer + Area;
    while(pBuffer<pEndBuffer)
    {
        pBuffer->color.r = pPCLSource->r;

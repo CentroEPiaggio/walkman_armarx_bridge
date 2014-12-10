@@ -48,11 +48,16 @@ namespace visionx {
         public armarx::ComponentPropertyDefinitions
     {
     public:
-        PCLPointCloudProviderPropertyDefinitions(std::string prefix):
-            ComponentPropertyDefinitions(prefix)
-        {
-            defineOptionalProperty<std::string>("pointCloudROSTopic", "/camera/depth_registered/points", "the ROS topic to connect");
-        }
+	PCLPointCloudProviderPropertyDefinitions(std::string prefix):
+	    ComponentPropertyDefinitions(prefix)
+	{
+	    defineOptionalProperty<Grid2DDimensions>("Dimensions", Grid2DDimensions(640,  480), "PointCloud Dimensions")
+				    .setCaseInsensitive(true)
+				    .map("320x240",     Grid2DDimensions(320,  240))
+				    .map("640x480",     Grid2DDimensions(640,  480));
+				    
+	    defineOptionalProperty<std::string>("pointCloudROSTopic", "/camera/depth_registered/points", "the ROS topic to connect");
+	}
     };
 
     /**
@@ -117,6 +122,8 @@ namespace visionx {
         boost::shared_mutex pointCloudMutex;
 	
 	sensor_msgs::PointCloud2ConstPtr& msg;
+	
+	Grid2DDimensions pointCloudDimensions;
 
         std::string point_cloud_topic_name;
 
