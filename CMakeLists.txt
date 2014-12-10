@@ -48,14 +48,15 @@ find_package(PCL 1.7 REQUIRED)
 # FIND_PACKAGE(tf_conversions REQUIRED)
 FIND_PACKAGE(catkin REQUIRED)
 FIND_PACKAGE(roscpp REQUIRED)
-
-
+FIND_PACKAGE(rosconsole REQUIRED)
 
 catkin_package(
   #INCLUDE_DIRS include
-  CATKIN_DEPENDS roscpp roslib
+  CATKIN_DEPENDS roscpp roslib rosconsole
   DEPENDS system_lib
 )
+
+set(catkin_LIBRARIES "${roscpp_LIBRARIES}" "${rosconsole_LIBRARIES}")
 
 ###########
 ## Build ##
@@ -70,6 +71,7 @@ include_directories(include
 
 link_directories(
         ${PCL_LIBRARY_DIRS}
+        ${catkin_LIBRARY_DIRS}
         )
 
 add_definitions(

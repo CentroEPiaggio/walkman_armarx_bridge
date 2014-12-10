@@ -7,8 +7,6 @@ find_package(PCL COMPONENTS common Quiet)
 #pcl_conversions
 #)
 
-
-
 set(SOURCES
 ./PCLPointCloudProvider.cpp
 #@TEMPLATE_LINE@@COMPONENT_PATH@/@COMPONENT_NAME@.cpp
@@ -20,9 +18,7 @@ set(HEADERS
 
 
 
-set(COMPONENT_LIBS VisionXInterfaces VisionXCore ArmarXInterfaces ArmarXCore ${catkin_LIBRARIES})
-
-
+set(COMPONENT_LIBS VisionXInterfaces VisionXCore ArmarXInterfaces ArmarXCore ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
 set(EXE_SOURCES main.cpp "${SOURCES}" "${HEADERS}")
 
