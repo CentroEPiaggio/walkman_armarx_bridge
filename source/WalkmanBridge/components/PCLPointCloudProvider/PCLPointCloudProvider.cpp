@@ -22,23 +22,31 @@
  */
 
 #include "PCLPointCloudProvider.h"
-
-
 using namespace armarx;
 
 
+namespace visionx {
+  namespace PointCloud {
+      
 void PCLPointCloudProvider::onInitCapturingPointCloudProvider()
 {
-    point_cloud_topic_name = getProperty<std::string>("pointCloudROSTopic");
+    point_cloud_topic_name = getProperty<std::string>("pointCloudROSTopic").getValue();
 
     setNumberPointClouds(1);
 
 
-   exampleTask = new RunningTask<RunningTaskExample>(this, &RunningTaskExample::exampleThreadMethod);
+//    exampleTask = new RunningTask<RunningTaskExample>(this, &RunningTaskExample::exampleThreadMethod);
 
     //;== while(1) ros_spin_once();
 
 }
+
+
+void PCLPointCloudProvider::onExitCapturingPointCloudProvider()
+{
+
+}
+
 
 //void exampleThreadMethod()
 //    {
@@ -56,23 +64,21 @@ void PCLPointCloudProvider::onInitCapturingPointCloudProvider()
 
 
 
-void PCLPointCloudProvider::onStartCapture()
+void PCLPointCloudProvider::onStartCapture(float frameRate, const Grid2DDimensions& dimensions)
 {
-    boost::mutex::scoped_lock(pointCloudMutex);
-
-    sub = nh.subscribe<PointCloud>(point_cloud_topic_name, 1, callback);
+    sub = nh.subscribe<sensor_msgs::PointCloud2>(point_cloud_topic_name, 1, &PCLPointCloudProvider::callback,this);
 }
 
 
 void PCLPointCloudProvider::onStopCapture()
 {
-    boost::mutex::scoped_lock(pointCloudMutex);
-
-    sub.unsubscribe();
+//TODO
+  
+  sub.shutdown();
 }
 
 
-void PCLPointCloudProvider::callback(const sensors_msgs::PointCloud2ConstPtr& msg)
+void PCLPointCloudProvider::callback(const sensor_msgs::PointCloud2ConstPtr& msg)
 {
    boost::mutex::scoped_lock(pointCloudMutex);
 
@@ -113,26 +119,17 @@ void PCLPointCloudProvider::callback(const sensors_msgs::PointCloud2ConstPtr& ms
 
 }
 
-bool MapPointClouds(const pcl::PointCloud* p)
-{
-
-}
 
 
 bool PCLPointCloudProvider::capture(void** pointCloudBuffers)
 {
    boost::mutex::scoped_lock(pointCloudMutex);
 
-   pointCloudBuffers = map_point_cloud(pointCloud);
-
-
+//    pointCloudBuffers = map_point_cloud(pointCloud);
+   return true;
 }
 
 
-void PCLPointCloudProvider::onExitComponent()
-{
-
-}
 
 PropertyDefinitionsPtr PCLPointCloudProvider::createPropertyDefinitions()
 {
@@ -140,3 +137,8 @@ PropertyDefinitionsPtr PCLPointCloudProvider::createPropertyDefinitions()
                                       getConfigIdentifier()));
 }
 
+    
+    
+  }
+  
+}

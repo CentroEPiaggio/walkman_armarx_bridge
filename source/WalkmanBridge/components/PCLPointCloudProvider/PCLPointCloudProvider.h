@@ -24,9 +24,10 @@
 #ifndef _ARMARX_COMPONENT_WalkmanBridge_PCLPointCloudProvider_H
 #define _ARMARX_COMPONENT_WalkmanBridge_PCLPointCloudProvider_H
 
-#include <queue>
-
+#include <ros/ros.h>
+#include <pcl_conversions/pcl_conversions.h>
 #include <pcl/point_cloud.h>
+
 
 #include <sensor_msgs/PointCloud2.h>
 
@@ -36,21 +37,20 @@
 #include <Core/core/Component.h>
 #include <VisionX/core/CapturingPointCloudProvider.h>
 
-namespace armarx
-{
+namespace visionx {
+  namespace PointCloud {
     /**
      * @class PCLPointCloudProviderPropertyDefinitions
      * @brief
      * @ingroup Components
      */
     class PCLPointCloudProviderPropertyDefinitions:
-        public ComponentPropertyDefinitions
+        public armarx::ComponentPropertyDefinitions
     {
     public:
         PCLPointCloudProviderPropertyDefinitions(std::string prefix):
             ComponentPropertyDefinitions(prefix)
         {
-            defineRequiredProperty<std::string>("PropertyName", "Description");
             defineOptionalProperty<std::string>("pointCloudROSTopic", "/camera/depth_registered/points", "the ROS topic to connect");
         }
     };
@@ -62,7 +62,7 @@ namespace armarx
      * Detailed Description
      */
     class PCLPointCloudProvider :
-        virtual public visionx::PointCloud::CapturingPointCloudProvider
+        virtual public CapturingPointCloudProvider
     {
     public:
         /**
@@ -102,11 +102,11 @@ namespace armarx
         /**
          * @see PropertyUser::createPropertyDefinitions()
          */
-        virtual PropertyDefinitionsPtr createPropertyDefinitions();
+        virtual armarx::PropertyDefinitionsPtr createPropertyDefinitions();
 
     private:
 
-        void callback(const PointCloud::ConstPtr& msg);
+        void callback(const sensor_msgs::PointCloud2ConstPtr& msg);
 
         boost::shared_mutex pointCloudMutex;
 
@@ -118,5 +118,8 @@ namespace armarx
 
     };
 }
+
+}
+
 
 #endif

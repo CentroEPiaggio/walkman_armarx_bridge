@@ -7,6 +7,8 @@ find_package(PCL COMPONENTS common Quiet)
 #pcl_conversions
 #)
 
+
+
 set(SOURCES
 ./PCLPointCloudProvider.cpp
 #@TEMPLATE_LINE@@COMPONENT_PATH@/@COMPONENT_NAME@.cpp
@@ -16,8 +18,13 @@ set(HEADERS
 #@TEMPLATE_LINE@@COMPONENT_PATH@/@COMPONENT_NAME@.h
 )
 
+
+
+set(COMPONENT_LIBS VisionXInterfaces VisionXCore ArmarXInterfaces ArmarXCore ${catkin_LIBRARIES})
+
+
+
 set(EXE_SOURCES main.cpp "${SOURCES}" "${HEADERS}")
+
 armarx_add_component_executable("${EXE_SOURCES}")
 
-# add unit tests
-add_subdirectory(test)
