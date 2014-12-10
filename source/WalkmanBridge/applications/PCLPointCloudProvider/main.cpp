@@ -28,10 +28,10 @@
 
 int main(int argc, char* argv[])
 {
+    ros::init(argc, argv, "armarx_walkman_brige_pcl");
+
     armarx::ApplicationPtr app = armarx::Application::createInstance < armarx::PCLPointCloudProviderApp > ();
     app->setName("PCLPointCloudProvider");
-
-    ros::init(argc, argv, "armarx_walkman_brige_pcl");
 
     return app->main(argc, argv);
 }

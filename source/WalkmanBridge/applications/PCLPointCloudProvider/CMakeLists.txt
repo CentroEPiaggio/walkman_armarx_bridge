@@ -9,12 +9,7 @@ armarx_component_set_name("PCLPointCloudProviderApp")
 #    include_directories(${MyLib_INCLUDE_DIRS})
 #endif()
 
-find_package(PCLPointCloudProvider QUIET)
 set(COMPONENT_LIBS ArmarXCore PCLPointCloudProvider)
-
-armarx_build_if(PCLPointCloudProvider "PCLPointCloudProvider not available")
-
-set(COMPONENT_LIBS ArmarXInterfaces ArmarXCore PCLPointCloudProvider)
 
 set(EXE_SOURCE PCLPointCloudProviderApp.h main.cpp)
 

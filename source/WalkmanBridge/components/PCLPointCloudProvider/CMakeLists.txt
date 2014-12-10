@@ -26,9 +26,5 @@ set(HEADERS
 
 set(COMPONENT_LIBS VisionXInterfaces VisionXCore ArmarXInterfaces ArmarXCore ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
-
-
-set(EXE_SOURCES "${SOURCES}" "${HEADERS}")
-
 armarx_add_component("${SOURCES}" "${HEADERS}")
 
