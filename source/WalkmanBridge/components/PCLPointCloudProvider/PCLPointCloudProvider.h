@@ -33,6 +33,7 @@
 
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/shared_mutex.hpp>
+#include <Core/core/services/tasks/PeriodicTask.h>
 
 #include <Core/core/Component.h>
 #include <VisionX/core/CapturingPointCloudProvider.h>
@@ -117,7 +118,7 @@ namespace visionx {
 	
 	void doROSSpinning();
 	
-	armarx::RunningTask<PCLPointCloudProvider>* spinningTask;
+	armarx::PeriodicTask<PCLPointCloudProvider>* spinningTask = 0;
 
         boost::shared_mutex pointCloudMutex;
 	
@@ -130,6 +131,8 @@ namespace visionx {
         ros::NodeHandle nh;
 
         ros::Subscriber sub;
+
+	bool is_latest_msg;
 
     };
 }

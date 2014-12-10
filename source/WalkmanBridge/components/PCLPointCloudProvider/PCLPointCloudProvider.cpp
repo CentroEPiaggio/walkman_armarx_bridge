@@ -30,7 +30,6 @@ namespace visionx {
       
 void PCLPointCloudProvider::onInitCapturingPointCloudProvider()
 {
-  
     pointCloudDimensions = getProperty<Grid2DDimensions>("Dimensions").getValue();
      
     point_cloud_topic_name = getProperty<std::string>("pointCloudROSTopic").getValue();
@@ -41,21 +40,23 @@ void PCLPointCloudProvider::onInitCapturingPointCloudProvider()
     
     setPointCloudSyncMode(eCaptureSynchronization);
 
-    spinningTask = new RunningTask<PCLPointCloudProvider>(this, &PCLPointCloudProvider::doROSSpinning);
+    spinningTask = new PeriodicTask<PCLPointCloudProvider>(this, &PCLPointCloudProvider::doROSSpinning,40);
+    spinningTask->start();
+    is_latest_msg = false;
 }
 
 
 void PCLPointCloudProvider::onExitCapturingPointCloudProvider()
 {
-   spinningTask->stop();
+   if(spinningTask!=0)spinningTask->stop();
 }
 
 
 void PCLPointCloudProvider::doROSSpinning()
 {
-  while(!spinningTask->isStopped()) {
+
     ros::spinOnce();
-  }
+
 }
 
 
@@ -76,12 +77,16 @@ void PCLPointCloudProvider::callback(const sensor_msgs::PointCloud2ConstPtr& msg
 {
    boost::mutex::scoped_lock(pointCloudMutex);
 
-   this->msg = msg;
+   if(!is_latest_msg)
+   {
+      is_latest_msg = true;
+   }
+      this->msg = msg;
 
 }
 
 
-bool PCLPointCloudProvider::convertPointCloud(sensor_msgs::PointCloud2ConstPtr&, void** pointCloudBuffers)
+bool PCLPointCloudProvider::convertPointCloud(sensor_msgs::PointCloud2ConstPtr& msg, void** pointCloudBuffers)
 {
    pcl::PointCloud<pcl::PointXYZRGB>::Ptr InputPCLCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
    pcl::fromROSMsg(*msg, *InputPCLCloud);
@@ -96,7 +101,7 @@ bool PCLPointCloudProvider::convertPointCloud(sensor_msgs::PointCloud2ConstPtr&,
 
    
    if( Information.dimensions.width != pointCloudDimensions.width || Information.dimensions.height != pointCloudDimensions.height) {
-//      ARMARX_ERROR << "invalid point cloud dimensions" << flush;
+     std::cout << "invalid point cloud dimensions" << std::endl;
       return false;
    }
  
@@ -132,9 +137,14 @@ bool PCLPointCloudProvider::convertPointCloud(sensor_msgs::PointCloud2ConstPtr&,
 
 bool PCLPointCloudProvider::capture(void** pointCloudBuffers)
 {
+   usleep(40000);
    boost::mutex::scoped_lock(pointCloudMutex);
 
-   bool result = convertPointCloud(msg, pointCloudBuffers);
+   if(is_latest_msg)
+   {
+    is_latest_msg = false;
+    bool result = convertPointCloud(msg, pointCloudBuffers);
+
 /*
    if(!result) {
    
@@ -142,6 +152,10 @@ bool PCLPointCloudProvider::capture(void** pointCloudBuffers)
      
     }*/
    return result;
+
+   }
+
+   return false;
 }
 
 
