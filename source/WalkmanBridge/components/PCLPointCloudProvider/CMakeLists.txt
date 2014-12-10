@@ -30,5 +30,5 @@ set(COMPONENT_LIBS VisionXInterfaces VisionXCore ArmarXInterfaces ArmarXCore ${c
 
 set(EXE_SOURCES "${SOURCES}" "${HEADERS}")
 
-armarx_add_component_executable("${EXE_SOURCES}")
+armarx_add_component("${SOURCES}" "${HEADERS}")
 

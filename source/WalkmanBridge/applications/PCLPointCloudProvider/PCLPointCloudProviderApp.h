@@ -25,7 +25,7 @@
 #define _ARMARX_APPLICATION_WalkmanBridge_PCLPointCloudProvider_H
 
 
-// #include <WalkmanBridge/components/@MyComponent@/@MyComponent@.h>
+#include <WalkmanBridge/components/PCLPointCloudProvider/PCLPointCloudProvider.h>
 
 #include <Core/core/application/Application.h>
 #include <Core/core/Component.h>
@@ -48,7 +48,7 @@ namespace armarx
         void setup(const ManagedIceObjectRegistryInterfacePtr& registry,
                    Ice::PropertiesPtr properties)
         {
-            registry->addObject( Component::create<PCLPointCloudProvider>(properties) );
+            registry->addObject( Component::create<visionx::PointCloud::PCLPointCloudProvider>(properties) );
         }
     };
 }

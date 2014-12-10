@@ -10,6 +10,7 @@ armarx_component_set_name("PCLPointCloudProviderApp")
 #endif()
 
 find_package(PCLPointCloudProvider QUIET)
+set(COMPONENT_LIBS ArmarXCore PCLPointCloudProvider)
 
 armarx_build_if(PCLPointCloudProvider "PCLPointCloudProvider not available")
 
