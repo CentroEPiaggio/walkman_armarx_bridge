@@ -128,7 +128,7 @@ bool PCLPointCloudProvider::convertPointCloud(sensor_msgs::PointCloud2ConstPtr& 
        ++pBuffer;
        ++pPCLSource;
    }
-   
+   memcpy(pointCloudBuffers[0],pBufferBase,Area*sizeof(ColoredPoint3D));
    return true;
 }
 
