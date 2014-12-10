@@ -121,7 +121,7 @@ namespace visionx {
 
         boost::shared_mutex pointCloudMutex;
 	
-	sensor_msgs::PointCloud2ConstPtr& msg;
+	sensor_msgs::PointCloud2ConstPtr msg;
 	
 	Grid2DDimensions pointCloudDimensions;
 
