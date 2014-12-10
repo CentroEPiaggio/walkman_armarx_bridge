@@ -1,20 +1,7 @@
 armarx_component_set_name("PCLPointCloudProvider")
 
-find_package(PCL REQUIRED)
-
-find_package(catkin REQUIRED COMPONENTS
-pcl_ros
+set(COMPONENT_LIBS ArmarXInterfaces ArmarXCore ${PCL_LIBRARIES} ${catkin_LIBRARIES}
 )
-
-armarx_build_if(PCL_FOUND "PCL not available")
-armarx_build_if(catkin_FOUND "catkin not available")
-
-if(PCL_FOUND)
-    include_directories(${PCL_INCLUDE_DIRS})
-    link_directories(${PCL_LIBRARY_DIRS})
-endif()
-
-set(COMPONENT_LIBS ArmarXInterfaces ArmarXCore ${PCL_LIBRARIES})
 
 set(SOURCES
 ./PCLPointCloudProvider.cpp
@@ -25,7 +12,8 @@ set(HEADERS
 #@TEMPLATE_LINE@@COMPONENT_PATH@/@COMPONENT_NAME@.h
 )
 
-armarx_add_component("${SOURCES}" "${HEADERS}")
+set(EXE_SOURCES main.cpp "${SOURCES}" "${HEADERS}")
+armarx_add_component_executable("${EXE_SOURCES}")
 
 # add unit tests
 add_subdirectory(test)
