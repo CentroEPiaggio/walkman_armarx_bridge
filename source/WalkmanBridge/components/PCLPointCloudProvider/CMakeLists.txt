@@ -28,7 +28,7 @@ set(COMPONENT_LIBS VisionXInterfaces VisionXCore ArmarXInterfaces ArmarXCore ${c
 
 
 
-set(EXE_SOURCES main.cpp "${SOURCES}" "${HEADERS}")
+set(EXE_SOURCES "${SOURCES}" "${HEADERS}")
 
 armarx_add_component_executable("${EXE_SOURCES}")
 
