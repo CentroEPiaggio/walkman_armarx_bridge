@@ -1,7 +1,11 @@
 armarx_component_set_name("PCLPointCloudProvider")
 
-set(COMPONENT_LIBS ArmarXInterfaces ArmarXCore ${PCL_LIBRARIES} ${catkin_LIBRARIES}
-)
+find_package(PCL COMPONENTS common Quiet)
+
+#find_package(catkin Quiet COMPONENTS
+#pcl_ros
+#pcl_conversions
+#)
 
 set(SOURCES
 ./PCLPointCloudProvider.cpp

@@ -24,10 +24,11 @@
 #ifndef _ARMARX_COMPONENT_WalkmanBridge_PCLPointCloudProvider_H
 #define _ARMARX_COMPONENT_WalkmanBridge_PCLPointCloudProvider_H
 
+#include <queue>
 
-#include <ros/ros.h>
-#include <pcl_ros/point_cloud.h>
-#include <pcl/point_types.h>
+#include <pcl/point_cloud.h>
+
+#include <sensor_msgs/PointCloud2.h>
 
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/shared_mutex.hpp>
@@ -50,7 +51,7 @@ namespace armarx
             ComponentPropertyDefinitions(prefix)
         {
             defineRequiredProperty<std::string>("PropertyName", "Description");
-            defineOptionalProperty<std::string>("PropertyName", "pcl", "point_cloud_topic");
+            defineOptionalProperty<std::string>("pointCloudROSTopic", "/camera/depth_registered/points", "the ROS topic to connect");
         }
     };
 
@@ -73,8 +74,6 @@ namespace armarx
         }
 
     protected:
-
-
         /**
          * @see visionx::PointCloud::CapturingPointCloudProvider
          */
@@ -95,22 +94,28 @@ namespace armarx
          */
         virtual void onStopCapture();
 
-
         /**
          * @see visionx::PointCloud::CapturingPointCloudProvider::capture()
          */
         virtual bool capture(void** pointCloudBuffers);
 
-
         /**
          * @see PropertyUser::createPropertyDefinitions()
          */
         virtual PropertyDefinitionsPtr createPropertyDefinitions();
+
     private:
+
+        void callback(const PointCloud::ConstPtr& msg);
+
         boost::shared_mutex pointCloudMutex;
+
         std::string point_cloud_topic_name;
+
         ros::NodeHandle nh;
-         ros::Subscriber sub;
+
+        ros::Subscriber sub;
+
     };
 }
 
