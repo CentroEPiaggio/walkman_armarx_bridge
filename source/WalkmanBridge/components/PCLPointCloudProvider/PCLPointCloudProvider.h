@@ -106,9 +106,17 @@ namespace visionx {
 
     private:
 
+        bool convertPointCloud(sensor_msgs::PointCloud2ConstPtr&, void** pointCloudBuffers);
+	
         void callback(const sensor_msgs::PointCloud2ConstPtr& msg);
+	
+	void doROSSpinning();
+	
+	armarx::RunningTask<PCLPointCloudProvider>* spinningTask;
 
         boost::shared_mutex pointCloudMutex;
+	
+	sensor_msgs::PointCloud2ConstPtr& msg;
 
         std::string point_cloud_topic_name;
 

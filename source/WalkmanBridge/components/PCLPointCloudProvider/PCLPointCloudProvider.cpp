@@ -34,11 +34,11 @@ void PCLPointCloudProvider::onInitCapturingPointCloudProvider()
 
     setNumberPointClouds(1);
 
+//     setPointCloudsFormat();
+    
+//     setPointCloudSyncMode();
 
-//    exampleTask = new RunningTask<RunningTaskExample>(this, &RunningTaskExample::exampleThreadMethod);
-
-    //;== while(1) ros_spin_once();
-
+    spinningTask = new RunningTask<PCLPointCloudProvider>(this, &PCLPointCloudProvider::doROSSpinning);
 }
 
 
@@ -48,19 +48,12 @@ void PCLPointCloudProvider::onExitCapturingPointCloudProvider()
 }
 
 
-//void exampleThreadMethod()
-//    {
-//        // do the work
-//        printf("Thread method\n");
-
-//        // shutdown is set if exampleTask->stop() is called.
-//        // running tasks need to handle the shutdown by themselves.
-//        // Here it is essentially not necessary but just serves as an example
-//        while(!exampleTask->isStopped())
-//        {
-//            usleep(10);
-//        }
-//    }
+void PCLPointCloudProvider::doROSSpinning()
+{
+  while(!spinningTask->isStopped()) {
+    ros::spinOnce();
+  }
+}
 
 
 
@@ -72,9 +65,7 @@ void PCLPointCloudProvider::onStartCapture(float frameRate, const Grid2DDimensio
 
 void PCLPointCloudProvider::onStopCapture()
 {
-//TODO
-  
-  sub.shutdown();
+    sub.shutdown();
 }
 
 
@@ -82,8 +73,15 @@ void PCLPointCloudProvider::callback(const sensor_msgs::PointCloud2ConstPtr& msg
 {
    boost::mutex::scoped_lock(pointCloudMutex);
 
+   this->msg = msg;
+
+}
+
+
+bool PCLPointCloudProvider::convertPointCloud(sensor_msgs::PointCloud2ConstPtr&, void** pointCloudBuffers)
+{
    pcl::PointCloud<pcl::PointXYZRGB>::Ptr InputPCLCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
-   pcl::fromROSMsg(*msg,*InputPCLCloud);
+   pcl::fromROSMsg(*msg, *InputPCLCloud);
 
    visionx::PointCloud::PointCloudFormatInfo Information;
    Information.dimensions.width = InputPCLCloud->width;
@@ -94,7 +92,6 @@ void PCLPointCloudProvider::callback(const sensor_msgs::PointCloud2ConstPtr& msg
    Information.pointContent = visionx::PointCloud::eCbrCbgCbbCba_PfxPfyPfz;
 
    pcl::PointXYZRGB* pPCLSource = const_cast<pcl::PointXYZRGB*>(&InputPCLCloud->points[0]);
-
 
    const int Area = Information.dimensions.width * Information.dimensions.height;
    // store this somewhere else
@@ -116,8 +113,10 @@ void PCLPointCloudProvider::callback(const sensor_msgs::PointCloud2ConstPtr& msg
        ++pBuffer;
        ++pPCLSource;
    }
-
+   
+   return true;
 }
+
 
 
 
@@ -125,8 +124,14 @@ bool PCLPointCloudProvider::capture(void** pointCloudBuffers)
 {
    boost::mutex::scoped_lock(pointCloudMutex);
 
-//    pointCloudBuffers = map_point_cloud(pointCloud);
-   return true;
+   bool result = convertPointCloud(msg, pointCloudBuffers);
+/*
+   if(!result) {
+   
+    ARMARX_WARN << "unable to capture point cloud " << flush;
+     
+    }*/
+   return result;
 }
 
 

@@ -1,11 +1,19 @@
 armarx_component_set_name("PCLPointCloudProvider")
 
-find_package(PCL COMPONENTS common Quiet)
+# find_package(PCL COMPONENTS common QUIET)
 
-#find_package(catkin Quiet COMPONENTS
-#pcl_ros
-#pcl_conversions
-#)
+# find_package(catkin COMPONENTS
+# pcl_ros
+# pcl_conversions
+# QUIET)
+
+# armarx_build_if(PCL_FOUND "PCL not available")
+# armarx_build_if(${catkin_ALL_FOUND_COMPONENTS} "ros packages not available")
+
+# if (PCL_FOUND AND catkin_ALL_FOUND_COMPONENTS)
+#     include_directories(${PCL_INCLUDE_DIRS})
+#     include_directories(${catkin_INCLUDE_DIRS})
+# endif()
 
 set(SOURCES
 ./PCLPointCloudProvider.cpp
@@ -16,9 +24,9 @@ set(HEADERS
 #@TEMPLATE_LINE@@COMPONENT_PATH@/@COMPONENT_NAME@.h
 )
 
-
-
 set(COMPONENT_LIBS VisionXInterfaces VisionXCore ArmarXInterfaces ArmarXCore ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+
+
 
 set(EXE_SOURCES main.cpp "${SOURCES}" "${HEADERS}")
 
