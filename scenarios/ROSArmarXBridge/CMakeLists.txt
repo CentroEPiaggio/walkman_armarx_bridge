@@ -6,6 +6,7 @@
 #    PickAndPlaceComponent)
 
 set(SCENARIO_COMPONENTS
+PCLPointCloudProvider
     )
 
 # optional 3rd parameter: "path/to/global/config.cfg"

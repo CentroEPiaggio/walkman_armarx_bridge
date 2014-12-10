@@ -8,7 +8,11 @@ find_package("ArmarXCore" REQUIRED)
 include(${ArmarXCore_USE_FILE})
 
 # Name for the project
+
 armarx_project("WalkmanBridge")
+depends_on_armarx_package(ArmarXGui)
+depends_on_armarx_package(MemoryX)
+depends_on_armarx_package(VisionX)
 
 # Specify each ArmarX Package dependency with the following macro
 # depends_on_armarx_package(ArmarXGui "OPTIONAL")
