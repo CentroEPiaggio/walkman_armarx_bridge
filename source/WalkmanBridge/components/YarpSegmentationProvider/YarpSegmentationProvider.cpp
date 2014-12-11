@@ -27,14 +27,44 @@
 using namespace armarx;
 
 
+void YarpSegmentationProvider::reportNewPointCloudSegmentation(const ::Ice::Current&)
+{
+    ARMARX_LOG << "New point cloud segementation" << flush;
+}
+
+void YarpSegmentationProvider::reportPointCloudSegmentation(const ::visionx::PointCloud::SegmentList&, const ::Ice::Current&)
+{
+    boost::mutex::scoped_lock(segmentationMutex);
+
+    segmentation = environmentalPrimitiveSegment->getEnvironmentalPrimitives();
+    ARMARX_INFO << "New segmentation reported (size: " << segmentation.size() << ") => Storing for later procession";
+
+    // push to yarp
+
+}
+
 void YarpSegmentationProvider::onInitComponent()
 {
-
+    usingTopic("SegmentedPointCloudScan");
 }
 
 
 void YarpSegmentationProvider::onConnectComponent()
 {
+
+    workingMemoryPrx = getProxy<memoryx::WorkingMemoryInterfacePrx>(getProperty<std::string>("WorkingMemoryName").getValue());
+    if(!workingMemoryPrx)
+    {
+        ARMARX_ERROR << "Failed to obtain working memory proxy";
+        return;
+    }
+
+    environmentalPrimitiveSegment = workingMemoryPrx->getEnvironmentalPrimitiveSegment();
+    if(!environmentalPrimitiveSegment)
+    {
+        ARMARX_ERROR << "Failed to obtain environmental primitive segment pointer";
+        return;
+    }
 
 }
 

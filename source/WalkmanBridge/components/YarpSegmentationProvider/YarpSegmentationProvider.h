@@ -27,6 +27,14 @@
 
 #include <Core/core/Component.h>
 
+#include <VisionX/interface/component/PointCloudSegmentation.h>
+
+#include <MemoryX/interface/component/WorkingMemoryInterface.h>
+#include <MemoryX/core/memory/SegmentedMemory.h>
+#include <MemoryX/libraries/memorytypes/segment/EnvironmentalPrimitiveSegment.h>
+
+
+
 namespace armarx
 {
     /**
@@ -53,7 +61,8 @@ namespace armarx
      * Detailed Description
      */
     class YarpSegmentationProvider :
-        virtual public armarx::Component
+        virtual public armarx::Component,
+        virtual public visionx::PointCloud::PointCloudSegmentationListener
     {
     public:
         /**
@@ -63,6 +72,10 @@ namespace armarx
         {
             return "YarpSegmentationProvider";
         }
+
+        virtual void reportNewPointCloudSegmentation(const ::Ice::Current& = ::Ice::Current());
+
+        virtual void reportPointCloudSegmentation(const ::visionx::PointCloud::SegmentList&, const ::Ice::Current& = ::Ice::Current());
 
     protected:
         /**
@@ -89,6 +102,16 @@ namespace armarx
          * @see PropertyUser::createPropertyDefinitions()
          */
         virtual PropertyDefinitionsPtr createPropertyDefinitions();
+
+    private:
+
+         Mutex segmentationMutex;
+
+         memoryx::WorkingMemoryInterfacePrx workingMemoryPrx;
+
+         memoryx::EnvironmentalPrimitiveSegmentBasePrx environmentalPrimitiveSegment;
+
+         memoryx::EnvironmentalPrimitiveBaseList segmentation;
     };
 }
 
