@@ -52,15 +52,15 @@ public:
         temp.addDouble(curvatureMax);
         temp.addDouble(curvatureMin);
         yarp::os::Bottle& list= temp.addList();
-        list.append(centroid.toBottle());
-        list= temp.addList();
-        list.append(meanNormal.toBottle());
-        list= temp.addList();
-        list.append(principalAxisI.toBottle());
-        list= temp.addList();
-        list.append(principalAxisJ.toBottle());
-        list= temp.addList();
-        list.append(principalAxisK.toBottle());
+        list.append(centroid().toBottle());
+        yarp::os::Bottle& list1= temp.addList();
+        list1.append(meanNormal().toBottle());
+        yarp::os::Bottle& list2= temp.addList();
+        list2.append(principalAxisI().toBottle());
+        yarp::os::Bottle& list3= temp.addList();
+        list3.append(principalAxisJ().toBottle());
+        yarp::os::Bottle& list4= temp.addList();
+        list4.append(principalAxisK().toBottle());
         temp.addDouble(extentI);
         temp.addDouble(extentJ);
         temp.addDouble(extentK);
@@ -75,7 +75,7 @@ public:
             return;
         if (temp->size()!=get_size())
             return;
-        active=temp->get(counter++).asBool();
+        active=temp->get(counter++).asInt();
         id=temp->get(counter++).asInt();
         curvatureMean=temp->get(counter++).asDouble();
         curvatureStandardDeviation=temp->get(counter++).asDouble();
@@ -85,7 +85,7 @@ public:
         {
             if (temp->get(counter).asList()==NULL)
                 return;
-            if (temp->get(counter).asList()->size()!=get_size())
+            if (temp->get(counter).asList()->size()!=Point3D::get_size())
                 return;
             surface[i].fromBottle(temp->get(counter).asList());
             counter++;
@@ -104,11 +104,16 @@ public:
     float curvatureStandardDeviation=0.0;
     float curvatureMax=0.0;
     float curvatureMin=0.0;
-    ::walkman::yarp_armarx::Point3D& centroid=surface[0];
-    ::walkman::yarp_armarx::Point3D& meanNormal=surface[1];
-    ::walkman::yarp_armarx::Point3D& principalAxisI=surface[2];
-    ::walkman::yarp_armarx::Point3D& principalAxisJ=surface[3];
-    ::walkman::yarp_armarx::Point3D& principalAxisK=surface[4];
+    ::walkman::yarp_armarx::Point3D& centroid(){return surface[0];}
+    ::walkman::yarp_armarx::Point3D& meanNormal(){return surface[1];}
+    ::walkman::yarp_armarx::Point3D& principalAxisI(){return surface[2];}
+    ::walkman::yarp_armarx::Point3D& principalAxisJ(){return surface[3];}
+    ::walkman::yarp_armarx::Point3D& principalAxisK(){return surface[4];}
+    const ::walkman::yarp_armarx::Point3D& centroid()const{return surface[0];}
+    const ::walkman::yarp_armarx::Point3D& meanNormal()const{return surface[1];}
+    const ::walkman::yarp_armarx::Point3D& principalAxisI()const{return surface[2];}
+    const ::walkman::yarp_armarx::Point3D& principalAxisJ()const{return surface[3];}
+    const ::walkman::yarp_armarx::Point3D& principalAxisK()const{return surface[4];}
     float extentI=0.0;
     float extentJ=0.0;
     float extentK=0.0;
