@@ -1,3 +1,4 @@
 
 add_subdirectory(ROSArmarXBridge)
 add_subdirectory(ArmarXROSBridge)
+add_subdirectory(YarpSegmentationProvider)
