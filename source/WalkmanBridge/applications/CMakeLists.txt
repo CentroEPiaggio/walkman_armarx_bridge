@@ -1,3 +1,4 @@
 
 
 add_subdirectory(PCLPointCloudProvider)
+add_subdirectory(YarpSegmentationProvider)
