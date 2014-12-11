@@ -6,11 +6,12 @@
 #    PickAndPlaceComponent)
 
 set(SCENARIO_COMPONENTS
+    CommonStorage
     LongtermMemory
     PriorKnowledge
-    CommonStorage
     WorkingMemory
-    PointCloudSegmentation
+    RobotStateComponent
+    PointCloudScanSegmentation
 )
 
 # optional 3rd parameter: "path/to/global/config.cfg"

@@ -14,6 +14,7 @@ depends_on_armarx_package(ArmarXGui)
 depends_on_armarx_package(MemoryX)
 depends_on_armarx_package(RobotAPI)
 depends_on_armarx_package(VisionX)
+depends_on_armarx_package(Armar3)
 
 # Specify each ArmarX Package dependency with the following macro
 # depends_on_armarx_package(ArmarXGui "OPTIONAL")
