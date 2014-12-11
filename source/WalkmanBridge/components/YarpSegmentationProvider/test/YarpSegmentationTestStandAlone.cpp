@@ -1,6 +1,5 @@
 
 #include <WalkmanBridge/components/YarpSegmentationProvider/YarpPointCloudSegmentation.h>
-#include <RobotAPI/interface/units/UnitInterface.ice>
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 #include <vector>

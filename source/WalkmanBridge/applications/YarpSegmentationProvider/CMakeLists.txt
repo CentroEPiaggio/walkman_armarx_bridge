@@ -9,7 +9,7 @@ armarx_component_set_name("YarpSegmentationProviderApp")
 #    include_directories(${MyLib_INCLUDE_DIRS})
 #endif()
 
-set(COMPONENT_LIBS ArmarXInterfaces ArmarXCore PCLPointCloudProvider)
+set(COMPONENT_LIBS ArmarXInterfaces ArmarXCore YarpSegmentationProvider)
 
 set(EXE_SOURCE YarpSegmentationProviderApp.h main.cpp)
 

@@ -29,7 +29,7 @@
 
 #include <Core/core/application/Application.h>
 #include <Core/core/Component.h>
-
+#include <WalkmanBridge/components/YarpSegmentationProvider/YarpSegmentationProvider.h>
 
 namespace armarx
 {
