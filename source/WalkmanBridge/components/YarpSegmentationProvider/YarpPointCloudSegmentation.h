@@ -150,7 +150,7 @@ public:
         
         int counter=0;
         segments.resize(temp->get(counter++).asInt());
-        for (int i=0;i<segments.size();i++)
+        for (unsigned int i=0;i<segments.size();i++)
         {
             if (temp->get(counter).asList()==NULL)
                 return;

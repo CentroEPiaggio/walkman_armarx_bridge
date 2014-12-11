@@ -33,7 +33,7 @@
 #include <MemoryX/core/memory/SegmentedMemory.h>
 #include <MemoryX/libraries/memorytypes/segment/EnvironmentalPrimitiveSegment.h>
 
-
+#include <yarp/os/all.h>
 
 namespace armarx
 {
@@ -112,6 +112,8 @@ namespace armarx
          memoryx::EnvironmentalPrimitiveSegmentBasePrx environmentalPrimitiveSegment;
 
          memoryx::EnvironmentalPrimitiveBaseList segmentation;
+
+	 yarp::os::BufferedPort<yarp::os::Bottle> output_port;
     };
 }
 

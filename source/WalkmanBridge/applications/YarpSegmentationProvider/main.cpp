@@ -23,9 +23,18 @@
 
 #include "YarpSegmentationProviderApp.h"
 #include <Core/core/logging/Logging.h>
+#include <yarp/os/all.h>
 
 int main(int argc, char* argv[])
 {
+    yarp::os::Network yarp;
+    if(!yarp.checkNetwork()){
+        std::cerr <<"yarpserver not running, quitting"<< std::endl;
+        return -1;
+    }
+
+    yarp.init();
+
     armarx::ApplicationPtr app = armarx::Application::createInstance < armarx::YarpSegmentationProviderApp > ();
     app->setName("YarpSegmentationProvider");
 

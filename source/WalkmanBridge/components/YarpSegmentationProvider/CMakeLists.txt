@@ -7,6 +7,8 @@ if(Eigen3_FOUND)
     include_directories(${Eigen3_INCLUDE_DIR})
 endif()
 
+find_package(YARP REQUIRED)
+
 set(COMPONENT_LIBS ArmarXInterfaces ArmarXCore)
 
 set(SOURCES
@@ -17,7 +19,7 @@ set(HEADERS
 )
 
 
-set(COMPONENT_LIBS VisionXInterfaces VisionXCore MemoryXMemoryTypes ArmarXInterfaces ArmarXCoreObservers ArmarXCore)
+set(COMPONENT_LIBS VisionXInterfaces VisionXCore MemoryXMemoryTypes ArmarXInterfaces ArmarXCoreObservers ArmarXCore ${YARP_LIBRARIES})
 
 
 armarx_add_component("${SOURCES}" "${HEADERS}")
