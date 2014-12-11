@@ -6,7 +6,12 @@
 #    PickAndPlaceComponent)
 
 set(SCENARIO_COMPONENTS
-    )
+    LongtermMemory
+    PriorKnowledge
+    CommonStorage
+    WorkingMemory
+    PointCloudSegmentation
+)
 
 # optional 3rd parameter: "path/to/global/config.cfg"
 armarx_scenario("YarpSegmentationProvider" "${SCENARIO_COMPONENTS}")
