@@ -11,7 +11,9 @@ set(SCENARIO_COMPONENTS
     PriorKnowledge
     WorkingMemory
     RobotStateComponent
-    PointCloudScanSegmentation
+    PointCloudSegmentation
+    YarpSegmentationProviderApp
+    OpenNIPointCloudProvider
 )
 
 # optional 3rd parameter: "path/to/global/config.cfg"

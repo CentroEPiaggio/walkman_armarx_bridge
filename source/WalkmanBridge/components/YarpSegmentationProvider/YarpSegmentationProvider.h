@@ -51,6 +51,7 @@ namespace armarx
         {
             //defineRequiredProperty<std::string>("PropertyName", "Description");
             //defineOptionalProperty<std::string>("PropertyName", "DefaultValue", "Description");
+	   defineOptionalProperty<std::string>("WorkingMemoryName", "WorkingMemory", "Name of WorkingMemory component");
         }
     };
 

@@ -29,7 +29,7 @@ using namespace armarx;
 
 void YarpSegmentationProvider::reportNewPointCloudSegmentation(const ::Ice::Current&)
 {
-    ARMARX_LOG << "New point cloud segementation" << flush;
+    ARMARX_LOG << "New point cloud segmentation" << flush;
 }
 
 void YarpSegmentationProvider::reportPointCloudSegmentation(const ::visionx::PointCloud::SegmentList&, const ::Ice::Current&)
@@ -38,7 +38,7 @@ void YarpSegmentationProvider::reportPointCloudSegmentation(const ::visionx::Poi
 
     segmentation = environmentalPrimitiveSegment->getEnvironmentalPrimitives();
     ARMARX_INFO << "New segmentation reported (size: " << segmentation.size() << ") => Storing for later procession";
-
+    std::cout<<"Bau"<<std::endl;
     walkman::yarp_armarx::SegmentList segment_list;
 
     for(auto segment:segmentation)
@@ -91,6 +91,8 @@ void YarpSegmentationProvider::onInitComponent()
 	std::cout<<"connecting "<<port_name_out <<" to " <<port_name_in<<std::endl;
 	yarp::os::Network::connect(port_name_out,port_name_in,style);
     }
+    
+    usingProxy(getProperty<std::string>("WorkingMemoryName").getValue());
 
     usingTopic("SegmentedPointCloudScan");
 }
