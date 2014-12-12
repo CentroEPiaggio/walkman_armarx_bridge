@@ -27,18 +27,17 @@
 using namespace armarx;
 
 
-void YarpSegmentationProvider::reportNewPointCloudSegmentation(const ::Ice::Current&)
+void YarpSegmentationProvider::reportPointCloudSegmentation(const ::visionx::PointCloud::SegmentList&, const ::Ice::Current&)
 {
     ARMARX_LOG << "New point cloud segmentation" << flush;
 }
 
-void YarpSegmentationProvider::reportPointCloudSegmentation(const ::visionx::PointCloud::SegmentList&, const ::Ice::Current&)
+void YarpSegmentationProvider::reportNewPointCloudSegmentation(const ::Ice::Current&)
 {
     boost::mutex::scoped_lock(segmentationMutex);
 
     segmentation = environmentalPrimitiveSegment->getEnvironmentalPrimitives();
     ARMARX_INFO << "New segmentation reported (size: " << segmentation.size() << ") => Storing for later procession";
-    std::cout<<"Bau"<<std::endl;
     walkman::yarp_armarx::SegmentList segment_list;
 
     for(auto segment:segmentation)
