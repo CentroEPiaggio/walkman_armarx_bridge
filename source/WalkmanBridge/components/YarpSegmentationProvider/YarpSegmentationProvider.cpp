@@ -26,6 +26,35 @@
 
 using namespace armarx;
 
+Vector3BasePtr generatePoint()
+{
+    Vector3BasePtr point(new Vector3);
+
+    point->x=3+((double)(rand()%10))/10.0;
+    point->y=4+((double)(rand()%10))/10.0;
+    point->z=5+((double)(rand()%10))/10.0;
+    return point;
+}
+
+
+memoryx::EnvironmentalPrimitiveBasePtr generateSegment()
+{
+    memoryx::EnvironmentalPrimitiveBasePtr segment(new memoryx::EnvironmentalPrimitive);
+    segment->setActive(true);
+    segment->setCentroid(generatePoint());
+    segment->setMaxCurvature(((double)(rand()%10)));
+    segment->setMinCurvature(((double)(rand()%10)));
+    segment->setMeanCurvature(((double)(rand()%10)));
+    segment->setStandardDeviation(((double)(rand()%10)));
+    segment->setExtentI(((double)(rand()%10)));
+    segment->setExtentJ(((double)(rand()%10)));
+    segment->setExtentK(((double)(rand()%10)));
+    segment->setMeanNormal(generatePoint());
+    segment->setPrincipalAxisI(generatePoint());
+    segment->setPrincipalAxisJ(generatePoint());
+    segment->setPrincipalAxisK(generatePoint());
+    return segment;
+}
 
 void YarpSegmentationProvider::reportPointCloudSegmentation(const ::visionx::PointCloud::SegmentList&, const ::Ice::Current&)
 {
@@ -36,7 +65,15 @@ void YarpSegmentationProvider::reportNewPointCloudSegmentation(const ::Ice::Curr
 {
     boost::mutex::scoped_lock(segmentationMutex);
 
-    segmentation = environmentalPrimitiveSegment->getEnvironmentalPrimitives();
+    //segmentation = environmentalPrimitiveSegment->getEnvironmentalPrimitives(); //NOTE: uncomment to process segments
+    
+    //NOTE: using fake segments
+    std::cout<<" - Warning: publishing fakes segment -"<<std::endl;
+    segmentation.clear();
+    segmentation.push_back(generateSegment());
+    segmentation.push_back(generateSegment());
+    segmentation.push_back(generateSegment());
+    
     ARMARX_INFO << "New segmentation reported (size: " << segmentation.size() << ") => Storing for later procession";
     walkman::yarp_armarx::SegmentList segment_list;
 
