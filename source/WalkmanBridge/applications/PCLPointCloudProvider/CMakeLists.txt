@@ -1,15 +1,14 @@
 armarx_component_set_name("PCLPointCloudProviderApp")
 
-#find_package(MyLib QUIET)
-#armarx_build_if(MyLib_FOUND "MyLib not available")
-#
-# all include_directories must be guarded by if(Xyz_FOUND)
-# for multiple libraries write: if(X_FOUND AND Y_FOUND)....
-#if(MyLib_FOUND)
-#    include_directories(${MyLib_INCLUDE_DIRS})
-#endif()
+find_package(roscpp QUIET)
 
-set(COMPONENT_LIBS ArmarXCore PCLPointCloudProvider)
+armarx_build_if(roscpp_FOUND "roscpp not available")
+
+if(roscpp_FOUND)
+    include_directories(${roscpp_INCLUDE_DIRS})
+endif()
+
+set(COMPONENT_LIBS ArmarXCore PCLPointCloudProvider ${roscpp_LIBRARIES})
 
 set(EXE_SOURCE PCLPointCloudProviderApp.h main.cpp)
 
