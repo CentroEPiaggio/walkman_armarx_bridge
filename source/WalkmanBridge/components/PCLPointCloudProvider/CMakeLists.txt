@@ -1,6 +1,6 @@
 armarx_component_set_name("PCLPointCloudProvider")
 
-find_package(PCL COMPONENTS common QUIET)
+find_package(PCL 1.7 QUIET)
 find_package(catkin COMPONENTS pcl_ros pcl_conversions QUIET)
 find_package(roscpp QUIET)
 find_package(rosconsole QUIET)
@@ -37,7 +37,7 @@ LINK_DIRECTORIES(${ROS_LIB_FOLDER} )
 if(catkin_FOUND)
 catkin_package(
   #INCLUDE_DIRS include
-  CATKIN_DEPENDS roscpp roslib rosconsole
+  CATKIN_DEPENDS roscpp roslib rosconsole pcl_ros pcl_conversions
   DEPENDS system_lib
 )
 
@@ -54,21 +54,9 @@ endif()
 ## Your package locations should be listed before other locations
 
 if(PCL_FOUND AND catkin_FOUND)
-
-include_directories(include
-        ${catkin_INCLUDE_DIRS}
-        ${PCL_INCLUDE_DIRS}
-        )
-
-link_directories(
-        ${PCL_LIBRARY_DIRS}
-        ${catkin_LIBRARY_DIRS}
-        )
-
-add_definitions(
-        ${PCL_DEFINITIONS} -DBOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
-        )
-
+	include_directories(${PCL_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
+	link_directories(${PCL_LIBRARY_DIRS} ${catkin_LIBRARY_DIRS})
+	add_definitions(${PCL_DEFINITIONS} -DBOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS)
 endif()
 
 
